@@ -2,7 +2,6 @@ const {
   MessageEmbed,
   Collection
 } = require("discord.js");
-const config = require("../botconfig/config.json");
 const ee = require("../botconfig/embed.json");
 const settings = require("../botconfig/settings.json");
 //EXPORT ALL FUNCTIONS
@@ -629,7 +628,7 @@ async function swap_pages(message, desc, TITLE, reactionemojis = ["⬅️", "⏹
  */
 function change_status(client) {
   try {
-    client.user.setActivity(`${config.prefix}help | ${client.guilds.cache.size} Guilds | ${Math.ceil(client.users.cache.size/1000)}k Members`, {
+    client.user.setActivity(`${process.env.BOT_PREFIX}help | ${client.guilds.cache.size} Guilds | ${Math.ceil(client.users.cache.size/1000)}k Members`, {
       type: "PLAYING",
     });
   } catch (e) {

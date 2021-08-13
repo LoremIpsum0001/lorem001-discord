@@ -1,4 +1,5 @@
 ﻿//Importing all needed Commands
+require('dotenv').config()
 const Discord = require("discord.js"); //this is the official discord.js wrapper for the Discord Api, which we use!
 const colors = require("colors"); //this Package is used, to change the colors of our Console! (optional and doesnt effect performance)
 const fs = require("fs"); //this package is for reading files and getting their inputs
@@ -30,4 +31,4 @@ module.exports.handlers = handlers;
 //the system for loading the cmds is needed for reloadbot
 
 //login into the bot
-client.login(require("./botconfig/config.json").token);
+client.login(process.env.BOT_TOKEN);
