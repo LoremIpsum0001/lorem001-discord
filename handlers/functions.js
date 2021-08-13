@@ -4,6 +4,13 @@ const {
 } = require("discord.js");
 const ee = require("../botconfig/embed.json");
 const settings = require("../botconfig/settings.json");
+
+const axios = require('axios');
+
+let server_ids = [];
+let cP = [];
+let cN = [];
+
 //EXPORT ALL FUNCTIONS
 module.exports.nFormatter = nFormatter;
 module.exports.change_status = change_status;
@@ -24,6 +31,15 @@ module.exports.GetRole = GetRole;
 module.exports.GetGlobalUser = GetGlobalUser;
 module.exports.parseMilliseconds = parseMilliseconds;
 module.exports.onCoolDown = onCoolDown;
+module.exports.change_name = change_name;
+module.exports.getSID = getSID;
+
+module.exports.getSKILL = getSKILL;
+module.exports.getBNB = getBNB;
+module.exports.getSLP = getSLP;
+module.exports.getAXS = getAXS;
+module.exports.getUSDT = getUSDT;
+module.exports.getETH = getETH;
 
 module.exports.replacemsg = replacedefaultmessages
 /**
@@ -631,6 +647,127 @@ function change_status(client) {
     client.user.setActivity(`${process.env.BOT_PREFIX}help | ${client.guilds.cache.size} Guilds | ${Math.ceil(client.users.cache.size/1000)}k Members`, {
       type: "PLAYING",
     });
+  } catch (e) {
+    console.log(String(e.stack).bgRed)
+  }
+}
+
+  //SKILL
+  function getSKILL() {
+    axios.get("https://api.coingecko.com/api/v3/coins/cryptoblades")
+    .then((response) => {
+      let currentprice = response.data.market_data.current_price.php
+      let name = response.data.symbol
+      
+      cP.push(`${currentprice}`);
+      cN.push(`${name}`);
+      
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+
+  //SLP
+  function getSLP(){
+    axios.get("https://api.coingecko.com/api/v3/coins/smooth-love-potion")
+    .then((response) => {
+      let currentprice = response.data.market_data.current_price.php
+      let name = response.data.symbol
+      
+      cP.push(`${currentprice}`);
+      cN.push(`${name}`);
+      
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+
+  //USDT 
+  function getUSDT(){
+    axios.get("https://api.coingecko.com/api/v3/coins/tether")
+    .then((response) => {
+      let currentprice = response.data.market_data.current_price.php
+      let name = response.data.symbol
+      
+      cP.push(`${currentprice}`);
+      cN.push(`${name}`);
+
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+  
+  //ETH 
+  function getETH(){
+    axios.get("https://api.coingecko.com/api/v3/coins/ethereum")
+    .then((response) => {
+      let currentprice = response.data.market_data.current_price.php
+      let name = response.data.symbol
+      
+      cP.push(`${currentprice}`);
+      cN.push(`${name}`);
+
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+
+  //BNB 
+  function getBNB(){
+    axios.get("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT")
+    .then((response) => {
+      let currentprice = response.data.price*50
+      let name = response.data.symbol
+
+      cP.push(`${Math.round(currentprice)}`);
+      cN.push(`${name}`);
+      
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+
+
+  //AXS 
+  function getAXS(){
+    axios.get("https://api.coingecko.com/api/v3/coins/axie-infinity")
+    .then((response) => {
+      let currentprice = response.data.market_data.current_price.php
+      let name = response.data.symbol
+      
+      cP.push(`${currentprice}`);
+      cN.push(`${name}`);
+      
+    })
+    .catch((err) => {
+      console.log('ERROR:', err)
+    })
+  }
+
+function getSID(sid){
+  if(server_ids.indexOf(sid) === -1) {
+    server_ids.push(sid);
+  }
+}
+
+function change_name(client) {
+
+  const index = Math.floor(Math.random() * (cN.length));
+  const newCoinP = `${cP.splice(index, 1)[0]}`;
+  const newCoinN = `${cN.splice(index, 1)[0]}`;
+
+  console.log("Server ID : " + server_ids + " CP/CN : " + cP + " " + cN);
+  try {
+    for (var i = 0; i < server_ids.length; i++) {
+      client.guilds.cache.find(guild => guild.id === server_ids[i]).me.setNickname(newCoinP + ' PHP/'+ newCoinN.toUpperCase());
+      server_ids = [];
+    }
+
   } catch (e) {
     console.log(String(e.stack).bgRed)
   }

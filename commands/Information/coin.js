@@ -25,9 +25,7 @@ module.exports = {
 
       axios.get("https://api.coingecko.com/api/v3/coins/smooth-love-potion")
       .then((response) => {
-        //message.channel.send("```md \n SLN Price: ```" + 
-        //response.data.market_data.current_price.php)
-    
+
         const updatedPrice = new MessageEmbed()
           .setTitle('Price : ₱' + response.data.market_data.current_price.php)
           .setColor('#FFC0CB')
