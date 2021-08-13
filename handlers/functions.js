@@ -7,10 +7,6 @@ const settings = require("../botconfig/settings.json");
 
 const axios = require('axios');
 
-let server_ids = [];
-let cP = [];
-let cN = [];
-
 //EXPORT ALL FUNCTIONS
 module.exports.nFormatter = nFormatter;
 module.exports.change_status = change_status;
@@ -34,12 +30,17 @@ module.exports.onCoolDown = onCoolDown;
 module.exports.change_name = change_name;
 module.exports.getSID = getSID;
 
+//Coins
 module.exports.getSKILL = getSKILL;
 module.exports.getBNB = getBNB;
 module.exports.getSLP = getSLP;
 module.exports.getAXS = getAXS;
 module.exports.getUSDT = getUSDT;
 module.exports.getETH = getETH;
+module.exports.loadCoins = loadCoins;
+let server_ids = [];
+let cP = [];
+let cN = [];
 
 module.exports.replacemsg = replacedefaultmessages
 /**
@@ -663,8 +664,8 @@ function change_status(client) {
       cN.push(`${name}`);
       
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
 
@@ -679,8 +680,8 @@ function change_status(client) {
       cN.push(`${name}`);
       
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
 
@@ -695,8 +696,8 @@ function change_status(client) {
       cN.push(`${name}`);
 
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
   
@@ -711,8 +712,8 @@ function change_status(client) {
       cN.push(`${name}`);
 
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
 
@@ -727,8 +728,8 @@ function change_status(client) {
       cN.push(`${name}`);
       
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
 
@@ -744,8 +745,8 @@ function change_status(client) {
       cN.push(`${name}`);
       
     })
-    .catch((err) => {
-      console.log('ERROR:', err)
+    .catch((e) => {
+      console.log(String(e.stack).bgRed)
     })
   }
 
@@ -755,19 +756,32 @@ function getSID(sid){
   }
 }
 
-function change_name(client) {
+function loadCoins() {
+  getSKILL()
+  getBNB()
+  getSLP()
+  getETH()
+  getUSDT()
+  getETH()
+  getAXS()
+}
 
+function change_name(client) {
   const index = Math.floor(Math.random() * (cN.length));
   const newCoinP = `${cP.splice(index, 1)[0]}`;
   const newCoinN = `${cN.splice(index, 1)[0]}`;
 
-  console.log("Server ID : " + server_ids + " CP/CN : " + cP + " " + cN);
+  console.log(cP + " " + cN)
   try {
     for (var i = 0; i < server_ids.length; i++) {
-      client.guilds.cache.find(guild => guild.id === server_ids[i]).me.setNickname(newCoinP + ' PHP/'+ newCoinN.toUpperCase());
-      server_ids = [];
+      try {
+          client.guilds.cache.find(guild => guild.id === server_ids[i]).me.setNickname(newCoinP + ' PHP/'+ newCoinN.toUpperCase());
+      }
+      catch(error) {
+        console.log(error)
+      }
     }
-
+    server_ids = [];
   } catch (e) {
     console.log(String(e.stack).bgRed)
   }

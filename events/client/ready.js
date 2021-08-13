@@ -1,6 +1,6 @@
 //here the event starts
 const config = require("../../botconfig/config.json")
-const {change_status, change_name, getSID, getSKILL, getBNB, getSLP, getAXS, getUSDT, getETH} = require("../../handlers/functions")
+const {change_status, change_name, getSID, getSKILL, getBNB, getSLP, getAXS, getUSDT, getETH, loadCoins} = require("../../handlers/functions")
 
 module.exports = client => {
   try{
@@ -16,14 +16,7 @@ module.exports = client => {
 
   try{
     change_status(client)
-    getSKILL()
-    getBNB()
-    getSLP()
-    getETH()
-    getUSDT()
-    getETH()
-    getAXS()
-
+    loadCoins()
   }catch (e) {
     console.log(String(e.stack).red);
   }
@@ -40,25 +33,18 @@ module.exports = client => {
   setInterval(() => {
     client.guilds.cache.forEach(guild => {
       getSID(guild.id);
-      //console.log('Server name : ' + guild.name + ' | Server id : ' + guild.id)
     })
   }, 3000)
 
   setInterval(() => {
-    getSKILL()
-    getBNB()
-    getSLP()
-    getETH()
-    getUSDT()
-    getETH()
-    getAXS()
+    loadCoins()
   }, 35500);
 
   setInterval(() => {
     try {
       change_name(client)
     } catch(error) {
-       console.log('Server just removed from bot list')
+       console.log(error)
     }
   }, 5000)
 }
